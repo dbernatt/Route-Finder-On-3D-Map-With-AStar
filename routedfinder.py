@@ -284,33 +284,34 @@ def astar_energy(graph, start, end):
       child.g = current_node.g + 1
       child.h = ((child.x - end_node.x) ** 2) + ((child.y - end_node.y) ** 2) + ((child.z - end_node.z) ** 2)
       child.f = child.g + child.h + (child.z - current_node.z)
-      # d_current_child = math.sqrt(((current_node.x - child.x) ** 2) + ((current_node.y - child.y) ** 2) + ((current_node.z - child.z) ** 2))
-      # if current_node.z < child.z:
-      #   c = Point(child.x, child.y, current_node.z, 0, -1, graph[current_node.y][current_node.x])
-      #   d_child_c = math.sqrt(((child.z - c.z) ** 2))
-      #   d_current_c = math.sqrt(((current_node.x - c.x) ** 2) + ((current_node.y - c.y) ** 2))
-      #   sin_alfa = d_child_c / d_current_child
-      #   cos_alfa = d_current_c / d_current_child
-      #   F = m * g * sin_alfa
-      #   s = d_child_c / sin_alfa
-      #   W = F * s * cos_alfa
-      #   child.f = child.f + W
-      # else:
-      #   if child.z < current_node:
-      #     c = Point(current_node.x, current_node.y, child.z, 0, -1, graph[current_node.y][current_node.x])
-      #     d_child_c = math.sqrt(((child.x - c.x) ** 2) + ((child.y - c.y) ** 2))
-      #     d_current_child = math.sqrt(((current_node.z - child.z) ** 2))
-      #     sin_alfa = d_current_c / d_current_child
-      #     cos_alfa = d_child_c / d_current_child
-      #     F = m * g * sin_alfa
-      #     s = d_current_c / sin_alfa
-      #     W = F * s * cos_alfa
-      #     child.f = child.f + W
-      #   else:
-      #     s = math.sqrt(((current_node.z - child.z) ** 2))
-      #     F = m * g
-      #     W = F * s
-      #     child.f = child.f + W
+      d_current_child = math.sqrt(((current_node.x - child.x) ** 2) + ((current_node.y - child.y) ** 2) + ((current_node.z - child.z) ** 2))
+
+      if current_node.z < child.z:
+        c = Point(child.x, child.y, current_node.z, 0, -1, graph[current_node.y][current_node.x])
+        d_child_c = math.sqrt(((child.z - c.z) ** 2))
+        d_current_c = math.sqrt(((current_node.x - c.x) ** 2) + ((current_node.y - c.y) ** 2))
+        sin_alfa = d_child_c / d_current_child
+        cos_alfa = d_current_c / d_current_child
+        F = m * g * sin_alfa
+        s = d_child_c / sin_alfa
+        W = F * s * cos_alfa
+        child.f = child.f + W
+      else:
+        if child.z < current_node:
+          c = Point(current_node.x, current_node.y, child.z, 0, -1, graph[current_node.y][current_node.x])
+          d_child_c = math.sqrt(((child.x - c.x) ** 2) + ((child.y - c.y) ** 2))
+          d_current_child = math.sqrt(((current_node.z - child.z) ** 2))
+          sin_alfa = d_current_c / d_current_child
+          cos_alfa = d_child_c / d_current_child
+          F = m * g * sin_alfa
+          s = d_current_c / sin_alfa
+          W = F * s * cos_alfa
+          child.f = child.f + W
+        else:
+          s = math.sqrt(((current_node.z - child.z) ** 2))
+          F = m * g
+          W = F * s
+          child.f = child.f + W
 
       # Child is already in the open list
       isIn = False
@@ -353,8 +354,8 @@ def plotSurf(graph, start, end, path_bfs, path_astar, path_astar_energy):
   ax.set_ylabel('Y')
   ax.set_zlabel('Z')
 
-  ax.text2D(0.05, 0.95, 'BFS path length: %d' % len(path_bfs), transform=ax.transAxes)
-  ax.text2D(0.05, 0.90, 'Astar path length: %d' % len(path_astar), transform=ax.transAxes)
+  ax.text2D(0.05, 0.95, '(BLUE) BFS path length: %d' % len(path_bfs), transform=ax.transAxes)
+  ax.text2D(0.05, 0.90, '(YELLOW) Astar path length: %d' % len(path_astar), transform=ax.transAxes)
 
   surf = ax.plot_trisurf(x,y,z, cmap=cm.coolwarm, linewidth=0, antialiased = True, alpha=.8)
 
@@ -363,9 +364,9 @@ def plotSurf(graph, start, end, path_bfs, path_astar, path_astar_energy):
   ax.scatter(start[0], start[1], start[2], marker = "o", s = 50, c = "red", cmap = "brg")
   ax.scatter(end[0], end[1], end[2], marker = "o", s = 50, c = "red", cmap = "brg")
 
-  # for i in range(len(b)):
-  #   if b[i] == 1:
-  #     ax.scatter(x[i], y[i], z[i], marker = "o", s = 10, c = "black", cmap = "brg")
+  for i in range(len(b)):
+    if b[i] == 1:
+      ax.scatter(x[i], y[i], z[i], marker = "o", s = 10, c = "black", cmap = "brg")
 
   # BFS path
   for i in path_bfs:
@@ -383,7 +384,7 @@ def plotSurf(graph, start, end, path_bfs, path_astar, path_astar_energy):
   for i in path_astar_energy:
     row = int(i[1])
     col = int(i[0])
-    ax.scatter(graph[row][col].x + offsetX, graph[row][col].y + offsetY,  graph[row][col].z, marker = "o", s = 20, c = "orange", cmap = "brg")
+    ax.scatter(graph[row][col].x + offsetX, graph[row][col].y + offsetY,  graph[row][col].z, marker = "o", s = 20, c = "green", cmap = "brg")
   
 
 
@@ -396,19 +397,20 @@ def main():
   start, end = readPoints("points.txt")
 
   path_bfs = minpath_bfs(graph, start, end)
-  print(path_bfs)
-  print(len(path_bfs))
+#   print(path_bfs)
+#   print(len(path_bfs))
 
   path_astar = astar(graph, start, end)
-  print(path_astar)
-  print(len(path_astar))
+#   print(path_astar)
+#   print(len(path_astar))
 
-  # path_astar_energy = astar_energy(graph, start, end)
-  # print(path_astar_energy)
-  # print(len(path_astar_energy))
+#   path_astar_energy = astar_energy(graph, start, end)
+#   print(path_astar_energy)
+#   print(len(path_astar_energy))
 
+#   plotSurf(graph, start, end, path_bfs, path_astar, path_astar_energy)
   plotSurf(graph, start, end, path_bfs, path_astar, [])
-  # plotSurf(graph, start, end, [], [], path_astar_energy)
+#   plotSurf(graph, start, end, [], [], path_astar_energy)
 
 if __name__ == '__main__':
   main()
