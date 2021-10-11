@@ -1,0 +1,25 @@
+- minden 3d pontnak van pontosan egy megfeleltetoje a 2d-ben
+- at kell vinni 3d -bol 2d -be -> x/z, y/z; (x, y, z) -> (x/z, y/z, 1)
+1. feladat: alkalmazd a szelessegi bejarast (bfs), es mered a tavolsagot minden csopontra a kezdopontra
+    - (x, y, z) -bol levetites -> csak az x, y -t hasznaljuk a z-t elhadjuk
+    - bfs: 2 lista kell:
+            - egy csomopontra
+            - visited: true vagy false
+            - tobevisited: true vagy false
+            - first in first out sor: a b c d f -el jelold az elemeket
+
+bfs: tovisited: 
+to_visit        | visited
+(a b c), 1      | s, 0
+(d, h, i) 2     | a, 1
+(f, e) 3        
+
+2. feladat(A*): 
+    a) Dijkstra: a sulya a tavolsag lesz
+    b) Dijkastra felturbozva: cost + h
+
+plussz: E = F * d;
+
+
+
+heatmap - magassag alapjan
